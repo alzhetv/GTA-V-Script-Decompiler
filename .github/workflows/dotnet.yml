@@ -1,0 +1,60 @@
+name: .NET
+
+on: [push]
+
+jobs:
+  build_windows:
+    name: Windows
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore -c Release
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Release-Windows
+        path: "GTA V Script Decompiler/bin/Release/net9.0-windows"
+        if-no-files-found: error
+
+  build_linux:
+    name: Linux
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore -c Release
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Release-Linux
+        path: "GTA V Script Decompiler/bin/Release/net9.0"
+        if-no-files-found: error
